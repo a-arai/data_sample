@@ -1,12 +1,31 @@
 <template>
     <ul>
-        <li v-for="item in val"><span>{{ item.id }}</span><span class="urlText">{{ item.html_url }}</span></li>
+        <li v-for="item in this.search_list"><span>{{ item.id }}</span><span class="urlText">{{ item.html_url }}</span></li>
     </ul>
 </template>
 
+
 <script>
+//import Vue from 'vue';
+import store from './store.js';
+
+
 export default {
-  props: ['val']
+  data() {
+    return {
+      //JSONのデータを格納
+      search_list: []
+    };
+  },
+  
+  created() {
+    //JSON取得
+    store.get_ajax('', 'search_list');
+    //JSON取得後に呼び出される
+    store.$on('GET_AJAX_COMPLETE', () => {
+      this.search_list = store.get_data('search_list');
+    });
+  }
 };
 </script>
 
